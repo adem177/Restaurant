@@ -1,16 +1,79 @@
-# React + Vite
+# Happy Plate — Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+SPA du restaurant **Happy Plate** : site vitrine, carte, panier, commande, réservation, espace client et back-office.
 
-Currently, two official plugins are available:
+- **React 19** · **React Router 7** · **Vite 8**
+- **Tailwind CSS 4** (tokens CSS clair/sombre)
+- **Axios** · **react-bootstrap-icons** · **qrcode.react**
+- Lint : **oxlint**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Démarrage
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev        # http://localhost:5173
+```
 
-## Expanding the Oxlint configuration
+L'API doit tourner en parallèle sur `http://127.0.0.1:8000` : Vite proxifie `/api` vers cette adresse (voir `vite.config.js`).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### Variables d'environnement
+
+| Variable | Défaut | Rôle |
+|---|---|---|
+| `VITE_API_URL` | `/api` | URL complète de l'API en production |
+
+```bash
+# .env
+VITE_API_URL=https://api.happyplate.com/api
+```
+
+---
+
+## Scripts
+
+| Commande | Effet |
+|---|---|
+| `npm run dev` | Serveur de développement (HMR) |
+| `npm run build` | Build de production dans `dist/` |
+| `npm run preview` | Prévisualisation du build |
+| `npm run lint` | Analyse oxlint |
+
+---
+
+## Structure
+
+```
+src/
+├── api/client.js        Instance Axios (token admin ou client selon l'URL)
+├── components/          Navbar, panier, produits, recherche, toasts…
+├── context/             Language, Theme, Cart, Auth, ClientAuth, Toast
+├── hooks/useSeo.js      Titre, description et Open Graph par page
+├── pages/               Pages publiques
+│   ├── admin/           Back-office (/admin)
+│   └── client/          Connexion et espace client
+└── utils/               Images, traductions, animation panier
+```
+
+### Routes
+
+| Route | Accès |
+|---|---|
+| `/`, `/menu`, `/cart`, `/checkout` | Public |
+| `/reservation`, `/account` | Compte client requis |
+| `/login`, `/register` | Public |
+| `/qr`, `/qr-generator` | Autonome |
+| `/admin/login` | Public |
+| `/admin/*` | Staff ; `/admin/users` réservé aux admins |
+
+Les pages lourdes (checkout, compte, admin) sont **chargées à la demande** via `React.lazy`.
+
+---
+
+## Thème, langues et PWA
+
+- **Thème clair/sombre** : bouton flottant en bas à gauche de l'accueil, choix persisté dans `happyplate_theme`, appliqué par `data-theme` sur `<html>`.
+- **FR / EN / AR** : bascule de langue avec passage en **RTL** et police Cairo.
+- **PWA** : `manifest.webmanifest` + service worker `sw.js` + page `offline.html`.
+- **SEO** : `robots.txt`, `sitemap.xml`, JSON-LD Restaurant et hook `useSeo`.
