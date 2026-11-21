@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Plate — Cuisine internationale, faite avec amour</title>
+    <meta
+      name="description"
+      content="Happy Plate — restaurant de cuisine internationale. Entrées, plats et desserts préparés frais chaque jour. Commandez en ligne en retrait ou livraison, ou réservez votre table."
+    />
+    <meta name="theme-color" content="#faf7f2" />
+    <script>
+      // Apply the stored theme before first paint to avoid a flash.
+      try {
+        if (localStorage.getItem('happyplate_theme') === 'dark') {
+          document.documentElement.dataset.theme = 'dark'
+          document.querySelector('meta[name="theme-color"]').content = '#16120f'
+        }
+      } catch (e) {}
+    </script>
+    <link rel="canonical" href="https://happyplate.com/" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Happy Plate" />
+    <meta property="og:title" content="Happy Plate — Cuisine internationale, faite avec amour" />
+    <meta
+      property="og:description"
+      content="Restaurant de cuisine internationale. Entrées, plats et desserts préparés frais chaque jour."
+    />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80" />
+    <meta property="og:url" content="https://happyplate.com/" />
+    <meta property="og:locale" content="fr_MA" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="ar_MA" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Happy Plate — Cuisine internationale, faite avec amour" />
+    <meta
+      name="twitter:description"
+      content="Restaurant de cuisine internationale. Entrées, plats et desserts préparés frais chaque jour."
+    />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80" />
+
+    <!-- Structured data: the restaurant itself -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "Happy Plate",
+        "description": "Cuisine internationale faite avec amour.",
+        "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80",
+        "servesCuisine": ["International", "Mediterranean", "Grill"],
+        "priceRange": "9 DT - 35 DT",
+        "currenciesAccepted": "TND",
+        "paymentAccepted": "Cash, Card",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Tunis",
+          "addressCountry": "TN"
+        },
+        "url": "https://happyplate.com/",
+        "sameAs": []
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600&family=Cairo:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "Happy Plate",
+  "short_name": "Happy Plate",
+  "description": "Restaurant de cuisine internationale — entrées, plats et desserts préparés frais chaque jour.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#120c0a",
+  "theme_color": "#120c0a",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["food", "shopping"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

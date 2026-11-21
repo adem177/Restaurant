@@ -1,0 +1,6 @@
+﻿node_modules/
+.env
+*.log
+
+# Documentation locale (hors dépôt)
+cachier de charge/

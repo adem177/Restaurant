@@ -1,0 +1,213 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Surfaces — ivory/light site-wide, cards in pure white. */
+  --color-ivory: #faf7f2;
+  --color-ivory-dark: #f2ebe3;
+  --color-surface: #ffffff;
+  /* Text */
+  --color-ink: #221b16;
+  --color-ink-soft: #5a4f46;
+  /* Accent — unchanged warm orange */
+  --color-accent: #c05621;
+  --color-accent-hover: #a34818;
+  /* Borders */
+  --color-line: #e6ddd2;
+  /* Always-dark surfaces (footer, final CTA) — never flipped by the theme. */
+  --color-night: #1a1614;
+  --color-on-night: #f5f0eb;
+
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Poppins', sans-serif;
+  --font-arabic: 'Cairo', sans-serif;
+}
+
+/*
+ * Dark mode: the utilities read these tokens through var(), so overriding
+ * them here flips every page, card, border and text colour at once.
+ */
+html[data-theme='dark'] {
+  --color-ivory: #16120f;
+  --color-ivory-dark: #1f1a16;
+  --color-surface: #26201c;
+  --color-ink: #f4efe9;
+  --color-ink-soft: #b3a89d;
+  --color-line: #3a312b;
+
+  .alert-error {
+    border-color: rgb(248 113 113 / 0.35);
+    background-color: rgb(248 113 113 / 0.12);
+    color: #fca5a5;
+  }
+
+  .alert-success {
+    border-color: rgb(74 222 128 / 0.35);
+    background-color: rgb(74 222 128 / 0.12);
+    color: #86efac;
+  }
+}
+
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-ivory);
+  color: var(--color-ink);
+}
+
+[dir='rtl'] body,
+[dir='rtl'] .font-display {
+  font-family: var(--font-arabic);
+}
+
+/* --- Shared component layer (CaterServ-style) --- */
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--color-ink);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  padding: 0.7rem 1.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-accent {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+.btn-accent:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.btn-outline {
+  border: 1px solid var(--color-line);
+  background-color: transparent;
+  color: var(--color-ink);
+}
+
+.btn-outline:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px -22px rgb(34 27 22 / 0.35);
+}
+
+.field {
+  width: 100%;
+  border-radius: 0.6rem;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-surface);
+  padding: 0.7rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--color-ink);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field::placeholder {
+  color: rgb(90 79 70 / 0.6);
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgb(192 86 33 / 0.15);
+}
+
+.alert-error {
+  border: 1px solid rgb(220 38 38 / 0.35);
+  background-color: rgb(220 38 38 / 0.08);
+  color: #b91c1c;
+  border-radius: 0.6rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+}
+
+.alert-success {
+  border: 1px solid rgb(22 163 74 / 0.35);
+  background-color: rgb(22 163 74 / 0.08);
+  color: #15803d;
+  border-radius: 0.6rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* Playful pop-in for the "added to cart" burger confirmation. */
+@keyframes burger-pop {
+  0% {
+    transform: scale(0.3) rotate(-12deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.25) rotate(6deg);
+    opacity: 1;
+  }
+  70% {
+    transform: scale(0.9) rotate(-3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Gentle drop-in for the navbar search panel. */
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.overlay-in {
+  animation: overlay-in 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
