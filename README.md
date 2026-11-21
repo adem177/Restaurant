@@ -1,125 +1,175 @@
-# Happy Plate
+# 🍽️ Happy Plate
 
-> « Le goût du monde, dans votre assiette » — site vitrine, réservation et commande en ligne d'un restaurant international.
+> Site vitrine, réservation et commande en ligne d'un restaurant international — API Laravel + SPA React dans un seul dépôt.
 
-Application **full-stack** répartie en deux projets dans un même dépôt :
-
-| Dossier | Rôle | Stack |
-|---|---|---|
-| [`bakery-api/`](bakery-api/) | API REST, authentification, back-office | **Laravel 13** · PHP 8.3 · Sanctum · SQLite |
-| [`bakery-client/`](bakery-client/) | Site public + espace client + admin | **React 19** · Vite 8 · Tailwind CSS 4 |
-
-- **Langues** : français, anglais, arabe (RTL)
-- **Thème** : clair par défaut, mode sombre persistant
-- **Paiement** : simulé (aucune transaction réelle)
+![PHP](https://img.shields.io/badge/PHP-8.3+-777BB4?logo=php&logoColor=white)
+![Laravel](https://img.shields.io/badge/Laravel-13-FF2D20?logo=laravel&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?logo=vite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-168_passing-2ea44f)
+![Langues](https://img.shields.io/badge/langues-FR_·_EN_·_AR-c05621)
 
 ---
 
-## Structure du dépôt
+## 📑 Sommaire
 
-```
-restaurant/
-├── bakery-api/          API Laravel (backend)
-│   ├── app/             Contrôleurs, modèles, middlewares, ressources
-│   ├── database/        Migrations, seeders, base SQLite locale
-│   ├── routes/api.php   Toutes les routes /api
-│   └── tests/           Tests PHPUnit (Feature + Unit)
-├── bakery-client/       SPA React (frontend)
-│   ├── src/pages/        Pages publiques, client et admin
-│   ├── src/components/  Composants réutilisables
-│   ├── src/context/     État global (panier, auth, langue, thème)
-│   └── public/          PWA, SEO, icônes
-└── cachier de charge/   Cahier des charges (local, non versionné)
-```
+- [Le problème résolu](#-le-problème-résolu)
+- [Démarrage rapide](#-démarrage-rapide)
+- [Comptes de démonstration](#-comptes-de-démonstration)
+- [Stack technique](#-stack-technique)
+- [Structure du projet](#-structure-du-projet)
+- [Fonctionnalités](#-fonctionnalités)
+- [Tests](#-tests)
+- [CI (GitHub Actions)](#-ci-github-actions)
+- [Documentation](#-documentation)
 
 ---
 
-## Prérequis
+## 🎯 Le problème résolu
 
-- **PHP** ≥ 8.3 avec l'extension `pdo_sqlite`
-- **Composer** 2
-- **Node.js** ≥ 20 et **npm**
-- (optionnel) **Docker** pour l'image de l'API
+Un restaurant indépendant veut vendre en ligne sans multiplier les outils : présenter sa carte, prendre des réservations, gérer les commandes à emporter ou en livraison, fidéliser ses clients et suivre son activité depuis un seul back-office.
+
+Happy Plate réunit tout cela dans une application unique :
+
+- une **carte vivante** pilotée par la base de données (42 produits, options, allergènes, stock) ;
+- un **parcours client complet** — réservation, panier, commande, suivi en temps réel, fidélité ;
+- un **back-office** pour les commandes, réservations, produits, avis, promotions et comptes staff ;
+- le tout en **français, anglais et arabe (RTL)**, avec thème **clair ou sombre**.
 
 ---
 
-## Installation
-
-### 1. API — `bakery-api`
+## 🚀 Démarrage rapide
 
 ```bash
+git clone https://github.com/adem177/Restaurant.git
+cd Restaurant
+
+# ── 1. API Laravel (:8000) ──────────────────────────────
 cd bakery-api
 composer install
 cp .env.example .env
 php artisan key:generate
-touch database/database.sqlite      # si le fichier n'existe pas
-php artisan migrate:fresh --seed    # crée le schéma et les données de démo
-php artisan serve                   # http://localhost:8000
-```
+touch database/database.sqlite     # Windows : type nul > database\database.sqlite
+php artisan migrate:fresh --seed
+php artisan serve
 
-> Sous Windows (cmd/PowerShell), remplacez `cp` par `copy` et `touch` par `type nul > database\database.sqlite`.
-
-### 2. Frontend — `bakery-client`
-
-```bash
+# ── 2. Client React (:5173) — dans un second terminal ───
 cd bakery-client
 npm install
-npm run dev                          # http://localhost:5173
+npm run dev
 ```
 
-En développement, Vite **proxifie `/api`** vers `http://127.0.0.1:8000` : les deux serveurs doivent tourner en même temps.
+> **Prérequis** : PHP 8.3+ avec `pdo_sqlite`, Composer 2, Node.js 20+ et npm.
 
-En production, définissez `VITE_API_URL` avec l'URL complète de l'API :
+Ensuite : ouvre **http://localhost:5173**, crée un compte client via `/register`, puis commande ou réserve. Vite proxifie automatiquement `/api` vers l'API locale, les deux serveurs doivent donc tourner en même temps.
 
-```bash
-# bakery-client/.env
-VITE_API_URL=https://api.happyplate.com/api
-```
+Back-office : **http://localhost:5173/admin/login**
 
 ---
 
-## Accès
+## 🔐 Comptes de démonstration
 
-| URL | Description |
-|---|---|
-| http://localhost:5173 | Site public |
-| http://localhost:5173/menu | Carte et filtres |
-| http://localhost:5173/account | Espace client (compte requis) |
-| http://localhost:5173/qr?table=1 | Menu QR de table |
-| http://localhost:5173/admin/login | Back-office (staff) |
-| http://localhost:8000/api | API REST |
-
-### Comptes de démonstration
+Créés automatiquement par `php artisan migrate:fresh --seed` :
 
 | Rôle | Email | Mot de passe |
 |---|---|---|
 | Admin | `admin@happyplate.com` | `password` |
 | Employé | `employe@happyplate.com` | `password` |
 
-Les comptes **clients** se créent depuis `/register`. Depuis le back-office, un admin peut créer, modifier, désactiver ou supprimer les comptes staff dans **Comptes** (`/admin/users`).
+L'admin accède à tout le back-office, y compris la gestion des comptes staff (`/admin/users`) : création, modification, activation/désactivation et suppression, avec protection du dernier admin actif. Aucun compte client n'est pré-créé : utilise `/register`.
 
 ---
 
-## Fonctionnalités principales
+## ⚙️ Stack technique
 
-- **Carte** : catégories, recherche, filtres végétarien / sans gluten / allergènes, badges stock.
-- **Options produits** : taille, cuisson, suppléments, formules — prix calculés en direct.
-- **Commande** : retrait ou livraison, code promo, remise par points, suivi en temps réel (polling + toasts).
-- **Réservation** : compte requis, confirmation par email, annulation.
-- **Fidélité** : 100 points = 5 DT, plafonnés à 20 % du sous-total.
-- **Menu QR** : page autonome par table, code QR généré.
-- **Avis** : un avis par produit, modération côté admin.
-- **Back-office** : dashboard, commandes, réservations, produits, avis, promotions, comptes staff.
+| Côté | Technologie | Version |
+|---|---|---|
+| **Backend** | PHP | `^8.3` |
+| | Laravel | `^13.17` |
+| | Laravel Sanctum (tokens) | `^4.3` |
+| | SQLite | — |
+| | PHPUnit · Laravel Pint | `^12.5` · `^1.27` |
+| **Frontend** | React | `^19.2` |
+| | React Router | `^7.18` |
+| | Vite | `^8.3` |
+| | Tailwind CSS | `^4.3` |
+| | Axios · react-bootstrap-icons · qrcode.react | `^1.20` · `^1.11` · `^4.2` |
+| | oxlint | `^1.81` |
+
+**Design** : tokens CSS clair/sombre (`data-theme`), accent orange `#c05621`, Playfair Display (titres), Poppins (texte), Cairo (arabe).
 
 ---
 
-## Qualité et tests
+## 📁 Structure du projet
+
+```
+Restaurant/
+├── bakery-api/                  API Laravel
+│   ├── app/
+│   │   ├── Http/Controllers/Api/    Public, Auth, Admin
+│   │   ├── Http/Middleware/         staff, admin
+│   │   ├── Http/Resources/          Réponses JSON
+│   │   └── Models/                  User, Product, Order…
+│   ├── database/
+│   │   ├── migrations/              29 migrations
+│   │   └── seeders/                 Carte, options, promos, démo
+│   ├── routes/api.php               Toutes les routes /api
+│   └── tests/                       168 tests (Feature + Unit)
+│
+├── bakery-client/               SPA React
+│   ├── src/
+│   │   ├── pages/                   Public + admin/ + client/
+│   │   ├── components/              Navbar, panier, recherche…
+│   │   ├── context/                 Langue, thème, panier, auth…
+│   │   ├── hooks/useSeo.js
+│   │   └── utils/
+│   └── public/                      PWA, sitemap, robots.txt
+│
+└── cachier de charge/           Cahier des charges (local, ignoré)
+```
+
+---
+
+## ✨ Fonctionnalités
+
+**Côté client**
+
+- ✅ Carte de **42 produits** en 5 catégories (entrées, plats, desserts, boissons, formules) avec recherche et filtres
+- ✅ Filtres végétarien, sans gluten, allergènes à éviter, plats épuisés
+- ✅ Fiche produit avec **options** (taille, cuisson, suppléments, formules) et prix calculé en direct
+- ✅ Panier persistant, **retrait ou livraison**, code promo et remise par points
+- ✅ **Paiement simulé** — aucun vrai débit, la commande passe en `pending`
+- ✅ **Réservation** avec confirmation par email, compte requis
+- ✅ **Suivi de commande** en temps réel (timeline + toasts automatiques)
+- ✅ **Fidélité** : 100 points = 5 DT, plafonnés à 20 % du sous-total
+- ✅ **Menu QR** par table (`/qr?table=N`) et générateur de QR
+- ✅ Avis produits modérés, un avis par client et par produit
+- ✅ **FR / EN / AR** avec bascule RTL
+- ✅ **Thème clair/sombre** persistant
+- ✅ **PWA installable** et page hors-ligne, SEO (sitemap, robots, JSON-LD)
+
+**Côté staff**
+
+- ✅ Dashboard : chiffre d'affaires, commandes, panier moyen, top produits
+- ✅ Commandes : changement de statut, retour du stock à l'annulation
+- ✅ Réservations : confirmer / annuler
+- ✅ Produits : CRUD complet (prix, catégorie, traductions, stock, images)
+- ✅ Avis : modération · Promotions : CRUD
+- ✅ **Comptes staff** : création, édition, activation/désactivation, suppression, garde-fous sur le dernier admin
+
+---
+
+## 🧪 Tests
 
 ```bash
-# API — 168 tests
+# API — 168 tests, 537 assertions
 cd bakery-api
 php artisan test --compact
-vendor/bin/pint --dirty            # style PHP
+
+# Style PHP
+vendor/bin/pint --dirty
 
 # Client
 cd bakery-client
@@ -127,10 +177,23 @@ npm run build
 npm run lint
 ```
 
-Les workflows GitHub Actions sont encore placés dans chaque sous-projet ; depuis le passage au dépôt unique, ils ne sont plus exécutés par GitHub (à déplacer dans `.github/workflows/` à la racine).
+Les tests couvrent l'API publique, l'authentification, le compte client, la fidélité, les commandes, les réservations, les avis, le stock et l'administration (dont la gestion des comptes staff).
 
 ---
 
-## Documentation
+## 🔄 CI (GitHub Actions)
 
-Le cahier des charges complet (périmètre, architecture, API, modèle de données) se trouve dans `cachier de charge/CAHIER_DE_CHARGE.md`. Ce dossier reste **local** et n'est pas versionné.
+Deux workflows existent, un par application :
+
+- **API** : Pint + PHPUnit (SQLite en mémoire)
+- **Client** : `npm ci` + `npm run build` + artefact `dist`
+
+⚠️ Depuis le passage au dépôt unique, ils se trouvent dans `bakery-api/.github/workflows/ci.yml` et `bakery-client/.github/workflows/ci.yml`. GitHub ne lit que `.github/workflows/` **à la racine** : ils doivent y être déplacés avec un `working-directory` adapté pour s'exécuter.
+
+---
+
+## 📚 Documentation
+
+Le cahier des charges complet (périmètre, architecture, API, modèle de données, limitations) est dans `cachier de charge/CAHIER_DE_CHARGE.md`. Ce dossier est **local** et n'est pas versionné.
+
+Documentation par application : [`bakery-api/README.md`](bakery-api/README.md) · [`bakery-client/README.md`](bakery-client/README.md)
