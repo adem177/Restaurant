@@ -59,7 +59,14 @@ export default function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/menu" element={<Menu />} />
                     <Route path="/cart" element={<Cart />} />
-                    <Route path="/checkout" element={<Checkout />} />
+                    <Route
+                      path="/checkout"
+                      element={
+                        <RequireClientAuth>
+                          <Checkout />
+                        </RequireClientAuth>
+                      }
+                    />
                     <Route
                       path="/reservation"
                       element={

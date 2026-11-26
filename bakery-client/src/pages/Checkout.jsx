@@ -31,10 +31,12 @@ export default function Checkout() {
   // Draft handed back by the login page so nothing typed is lost.
   const draft = location.state?.draft
 
+  // Contact fields always start blank: the customer types them at checkout.
+  // A draft saved before the login redirect is still restored.
   const [form, setForm] = useState(() => ({
-    customer_name: draft?.form?.customer_name ?? user?.name ?? '',
-    customer_phone: draft?.form?.customer_phone ?? user?.phone ?? '',
-    customer_email: draft?.form?.customer_email ?? user?.email ?? '',
+    customer_name: draft?.form?.customer_name ?? '',
+    customer_phone: draft?.form?.customer_phone ?? '',
+    customer_email: draft?.form?.customer_email ?? '',
     type: draft?.form?.type ?? 'pickup',
     address: draft?.form?.address ?? '',
   }))

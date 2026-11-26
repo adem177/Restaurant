@@ -17,10 +17,11 @@ export default function Reservation() {
   const { t } = useLanguage()
   const { user, logout } = useClientAuth()
   useSeo({ title: t.reservation?.title, path: '/reservation' })
+  // Contact fields always start blank, even when logged in.
   const [form, setForm] = useState({
-    name: user?.name || '',
-    phone: user?.phone || '',
-    email: user?.email || '',
+    name: '',
+    phone: '',
+    email: '',
     date: '',
     time: '19:30',
     guests: 2,

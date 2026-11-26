@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { XLg, Trash3 } from 'react-bootstrap-icons'
 import { useCart } from '../context/CartContext'
+import { useClientAuth } from '../context/ClientAuthContext'
 import { useLanguage } from '../context/LanguageContext'
 import { localizedName } from '../utils/localize'
 
@@ -15,6 +16,7 @@ import { localizedName } from '../utils/localize'
 export default function CartDrawer({ open, onClose }) {
   const { t, lang } = useLanguage()
   const { items, updateQuantity, removeItem, total, clearCart } = useCart()
+  const { user, loading } = useClientAuth()
   const navigate = useNavigate()
   const rtl = lang === 'ar'
 
@@ -31,8 +33,14 @@ export default function CartDrawer({ open, onClose }) {
     }
   }, [open, onClose])
 
+  // Guests must sign in before checkout: send them straight to the login
+  // page with /checkout as the return target (the route is guarded too).
   const goToCheckout = () => {
     onClose()
+    if (!loading && !user) {
+      navigate('/login', { state: { from: '/checkout' } })
+      return
+    }
     navigate('/checkout')
   }
 

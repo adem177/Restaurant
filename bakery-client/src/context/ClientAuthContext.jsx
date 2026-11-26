@@ -1,9 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import api from '../api/client'
 
 const ClientAuthContext = createContext(null)
 
 export function ClientAuthProvider({ children }) {
+  const navigate = useNavigate()
   const [user, setUser] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('client_user')) || null
@@ -59,6 +61,9 @@ export function ClientAuthProvider({ children }) {
     localStorage.removeItem('client_token')
     localStorage.removeItem('client_user')
     setUser(null)
+    // Always bring the visitor back to the HappyPlate home page, whatever
+    // page they signed out from (account, reservation, navbar...).
+    navigate('/', { replace: true })
   }
 
   /**
